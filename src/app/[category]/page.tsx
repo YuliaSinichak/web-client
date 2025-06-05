@@ -1,4 +1,4 @@
-import MainPage from "../page";
+import MainPage from "@/components/MainPage";
 
 const validFilters = [
   "all",
@@ -8,11 +8,13 @@ const validFilters = [
 ] as const;
 type ValidFilter = (typeof validFilters)[number];
 
-export default function CategoryPage({
-  params,
-}: {
-  params: { category: string };
-}) {
+interface CategoryPageProps {
+  params: {
+    category: string;
+  };
+}
+
+export default function CategoryPage({ params }: CategoryPageProps) {
   const category = validFilters.includes(params.category as ValidFilter)
     ? (params.category as ValidFilter)
     : "all";
