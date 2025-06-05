@@ -8,15 +8,15 @@ const validFilters = [
 ] as const;
 type ValidFilter = (typeof validFilters)[number];
 
-interface CategoryPageProps {
-  params: {
-    category: string;
-  };
-}
+type Props = {
+  params: Promise<{ category: string }>;
+};
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const category = validFilters.includes(params.category as ValidFilter)
-    ? (params.category as ValidFilter)
+export default async function CategoryPage({ params }: Props) {
+  const { category: rawCategory } = await params;
+
+  const category = validFilters.includes(rawCategory as ValidFilter)
+    ? (rawCategory as ValidFilter)
     : "all";
 
   return <MainPage initialFilter={category} />;

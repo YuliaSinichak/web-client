@@ -73,7 +73,7 @@ const Cell: React.FC<CellProps> = ({
 type ValidFilter = "all" | "residential" | "commercial" | "industrial";
 
 type MainPageProps = {
-  initialFilter: "all" | "residential" | "commercial" | "industrial";
+  initialFilter?: "all" | "residential" | "commercial" | "industrial";
 };
 
 const MainPage: React.FC<MainPageProps> = ({ initialFilter = "all" }) => {

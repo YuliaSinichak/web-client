@@ -1,12 +1,8 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const BuildingDetailsPage = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-
-  const row = parseInt(searchParams.get("row") || "0");
-  const col = parseInt(searchParams.get("col") || "0");
 
   const dummyBuildingData = {
     icon: "🏘️",
