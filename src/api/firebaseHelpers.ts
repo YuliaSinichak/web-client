@@ -17,7 +17,7 @@ export type Building = {
     upgradedIcon?: string | null;
   };
   
-  const BASE_URL = 'http://localhost:8080'; 
+  const BASE_URL = 'https://web-my-server.onrender.com'; 
   // Make sure you set NEXT_PUBLIC_API_URL to your NestJS backend URL or leave empty for same origin
   
   export async function getBuildings(): Promise<Building[]> {

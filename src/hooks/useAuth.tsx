@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, useContext, createContext } from "react";
 import {
   onAuthStateChanged,
@@ -7,13 +8,15 @@ import {
   createUserWithEmailAndPassword,
   User,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+
+import { auth, db } from "@/lib/firebase"; // Your firebase instances
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, role: string) => Promise<User>;
   logout: () => Promise<void>;
 }
 
@@ -35,9 +38,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signup = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
-  };
+  async function signup(email: string, password: string, role: string) {
+    // create user with Firebase Auth
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    // save role and email to Firestore under users collection
+    await setDoc(doc(db, "users", user.uid), {
+      email,
+      role,
+      createdAt: serverTimestamp(),
+    });
+
+    return user;
+  }
 
   const logout = async () => {
     await signOut(auth);

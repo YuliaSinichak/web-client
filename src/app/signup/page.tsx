@@ -2,21 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth"; // import your auth hook
+import { useAuth } from "@/hooks/useAuth"; // your auth hook
 
 const SignUp = () => {
   const router = useRouter();
-  const { signup } = useAuth(); // get signup function from auth context
+  const { signup } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirm: "",
+    role: "builder", // default role
   });
 
   const [error, setError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -30,8 +33,8 @@ const SignUp = () => {
     }
 
     try {
-      await signup(formData.email, formData.password);
-      router.push("/"); // Redirect to main page after signup
+      await signup(formData.email, formData.password, formData.role);
+      router.push("/");
     } catch (err: any) {
       setError("Не вдалося зареєструватися. Спробуйте іншу пошту або пароль.");
       console.error("Signup error:", err);
@@ -78,6 +81,18 @@ const SignUp = () => {
           onChange={handleChange}
           required
         />
+
+        {/* Role Selector */}
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+        >
+          <option value="builder">Builder</option>
+          <option value="admin">Admin</option>
+        </select>
+
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition"
